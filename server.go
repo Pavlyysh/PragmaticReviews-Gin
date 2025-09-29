@@ -2,6 +2,7 @@ package main
 
 import (
 	"io"
+	"net/http"
 	"os"
 	"pavlyysh/golang-gin-gonic/controller"
 	"pavlyysh/golang-gin-gonic/middlewares"
@@ -35,7 +36,16 @@ func main() {
 	})
 
 	server.POST("/videos", func(ctx *gin.Context) {
-		ctx.JSON(200, videoController.Save(ctx))
+		err := videoController.Save(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "OK",
+			})
+		}
 	})
 
 	server.Run(":8080")

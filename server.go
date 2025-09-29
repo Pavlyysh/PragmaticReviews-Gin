@@ -1,10 +1,14 @@
 package main
 
 import (
+	"io"
+	"os"
 	"pavlyysh/golang-gin-gonic/controller"
+	"pavlyysh/golang-gin-gonic/middlewares"
 	"pavlyysh/golang-gin-gonic/service"
 
 	"github.com/gin-gonic/gin"
+	gindump "github.com/tpkeeper/gin-dump"
 )
 
 var (
@@ -12,8 +16,19 @@ var (
 	videoController controller.VideoController = controller.New(videoService)
 )
 
+// Creates new file which stores log
+func setupLogOutput() {
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+}
+
 func main() {
-	server := gin.Default()
+
+	setupLogOutput()
+
+	server := gin.New()
+
+	server.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth(), gindump.Dump())
 
 	server.GET("/videos", func(ctx *gin.Context) {
 		ctx.JSON(200, videoController.FindAll())

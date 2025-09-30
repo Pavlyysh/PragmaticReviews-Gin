@@ -1,11 +1,11 @@
 package validators
 
-import (
-	"strings"
+// import (
+// 	"strings"
 
-	"github.com/go-playground/validator/v10"
-)
+// 	"github.com/go-playground/validator/v10"
+// )
 
-func ValidateCoolTitle(field validator.FieldLevel) bool {
-	return strings.Contains(field.Field().String(), "cool")
-}
+// func ValidateCoolTitle(field validator.FieldLevel) bool {
+// 	return strings.Contains(field.Field().String(), "cool")
+// }
